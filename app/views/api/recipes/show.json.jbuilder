@@ -1,1 +1,1 @@
-json.extract!(recipe, :id, :name)
+json.extract!(recipe, :id, :name, :ingredients)

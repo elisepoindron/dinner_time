@@ -9,38 +9,34 @@
 #   end
 
 
+return if Recipe.exists?
 
 puts "Seeding database"
 
 json = File.read('db/recipes.json')
 parsed_recipes = JSON.parse(json)
 
-if !Ingredient.exists?
-  puts "Seeding ingredients"
+parsed_recipes.each do |recipe|
+  created_recipe = Recipe.create({
+        name: recipe["title"],
+        cooking_time: recipe["cook_time"],
+        preparation_time: recipe["prep_time"],
+        rating: recipe["ratings"],
+        cuisine: recipe["cuisine"],
+        category: recipe["category"],
+        author: recipe["author"],
+        image_url: recipe["image"]
+      })
 
-  ingredients = parsed_recipes.flat_map { |recipe| recipe["ingredients"] }.uniq
-  ingredients.each { |ingredient| Ingredient.create({ name: ingredient }) }
+  ingredients = recipe["ingredients"]
+  ingredients.each do |ingredient|
+    created_ingredient = Ingredient.find_or_create_by(name: ingredient)
 
-  puts "#{ingredients.length} ingredients seeded"
-
-end
-
-if !Recipe.exists?
-  puts "Seeding recipes"
-
-  parsed_recipes.each do |recipe|
-    Recipe.create({
-          name: recipe["title"],
-          cooking_time: recipe["cook_time"],
-          preparation_time: recipe["prep_time"],
-          ingredients: recipe["ingredients"],
-          rating: recipe["ratings"],
-          cuisine: recipe["cuisine"],
-          category: recipe["category"],
-          author: recipe["author"],
-          image_url: recipe["image"]
-        })
+    RecipeIngredient.create({
+      recipe_id: created_recipe[:id],
+      ingredient_id: created_ingredient[:id]
+    })
   end
-
-  puts "#{parsed_recipes.length}  recipes seeded"
 end
+
+puts "#{parsed_recipes.length}  recipes seeded"
