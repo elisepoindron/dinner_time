@@ -1,9 +1,11 @@
 import axios from "axios"
 
-async function getRecipes() {
+async function getRecipes(filter) {
   let recipes = []
   try {
-    const response = await axios.get("/api/recipes")
+    const response = await axios.get("/api/recipes/", {
+      params: { ingredients: filter },
+    })
     recipes = response.data
   } catch (err) {
     console.log("Error", err)
@@ -12,4 +14,16 @@ async function getRecipes() {
   return recipes
 }
 
-export {getRecipes}
+async function getRecipe(id) {
+  let recipe
+  try {
+    const response = await axios.get(`/api/recipes/${id}`)
+    recipe = response.data
+  } catch (err) {
+    console.log("Error", err)
+  }
+
+  return recipe
+}
+
+export { getRecipes, getRecipe }
