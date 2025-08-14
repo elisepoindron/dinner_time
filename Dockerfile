@@ -1,4 +1,4 @@
-FROM ruby:3.1.4-alpine3.18 as alpine-ruby
+FROM ruby:3.1.3-alpine as alpine-ruby
 
 ENV HOME=/home/rails
 
