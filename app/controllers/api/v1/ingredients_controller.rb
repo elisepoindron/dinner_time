@@ -8,6 +8,8 @@ module Api
       end
 
       def show
+        @ingredient = Ingredient.find(params[:id])
+
         render locals: { ingredient: @ingredient }
       end
     end
