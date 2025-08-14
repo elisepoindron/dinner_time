@@ -18,7 +18,6 @@ FROM alpine-ruby as prod-api
 
 USER rails
 
-ENV RAILS_MASTER_KEY ${RAILS_MASTER_KEY}
 RUN gem install bundler -v 2.6
 
 RUN bin/bundle lock --add-platform x86_64-linux
