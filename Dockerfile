@@ -2,7 +2,7 @@ FROM ruby:3.4-alpine as alpine-ruby
 
 ENV HOME=/home/rails
 
-RUN apk -U upgrade && apk --update add postgresql14-client postgresql-dev build-base tzdata nodejs npm 
+RUN apk -U upgrade && apk --update add postgresql16-client postgresql-dev build-base tzdata nodejs npm 
 RUN npm install --global yarn
 
 RUN addgroup -S -g 1001 rails && adduser -u 1000 -S -G rails rails
