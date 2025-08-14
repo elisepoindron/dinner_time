@@ -48,11 +48,22 @@ export default defineComponent({
     const recipe_dialog = ref(false);
     const selected_recipe = ref(null);
 
+    /**
+     * Get a list of recipes filtered on ingredients
+     * 
+     * @param filter a string of ingredients to be filtered on
+     */
     async function refreshRecipes(filter) {
       recipes.value = await getRecipes(filter);
     }
 
-    async function openRecipe(event, row) {
+    /**
+     * Get the selected recipe's details and open the a dialog to display them
+     * 
+     * @param _ 
+     * @param row the selected row
+     */
+    async function openRecipe(_, row) {
       selected_recipe.value = await getRecipe(row.item.id);
       recipe_dialog.value = true;
     }

@@ -1,5 +1,11 @@
 import axios from "axios"
 
+/**
+ * Get all recipes matching the research filter on ingredients. 
+ * 
+ * @param {string} filter 
+ * @returns a list of Recipe
+ */
 async function getRecipes(filter) {
   let recipes = []
   try {
@@ -14,6 +20,12 @@ async function getRecipes(filter) {
   return recipes
 }
 
+/**
+ * Get a recipe by id, with its details
+ * 
+ * @param {BigInteger} id 
+ * @returns a Recipe
+ */
 async function getRecipe(id) {
   let recipe
   try {
