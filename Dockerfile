@@ -3,8 +3,8 @@ FROM ruby:3.1.3-alpine as alpine-ruby
 ENV HOME=/home/rails
 
 RUN apk --update add postgresql14-client postgresql-dev build-base tzdata npm
-RUN npm install --global npm
 RUN npm install --global node
+RUN npm install --global npm
 RUN npm install --global yarn
 
 RUN addgroup -S -g 1001 rails && adduser -u 1000 -S -G rails rails
