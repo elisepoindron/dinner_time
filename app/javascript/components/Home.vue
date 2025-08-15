@@ -6,6 +6,7 @@
         <v-text-field
           v-model="ingredients_filter"
           label="Filter by ingredients"
+          v-on:keyup.enter="refreshRecipes(ingredients_filter)" 
         ></v-text-field>
       </v-col>
       <v-col>
