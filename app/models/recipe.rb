@@ -11,6 +11,8 @@ class Recipe < ApplicationRecord
     using: {
        tsearch: {
         dictionary: "english",
-        prefix: true
-         } }
+        prefix: true,
+        any_word: true
+        } },
+    order_within_rank: "recipes.rating DESC"
 end
