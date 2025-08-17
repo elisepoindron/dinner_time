@@ -32,6 +32,11 @@ RSpec.describe "Recipes", type: :request do
         expect((response_body).length).to equal(1)
         expect(response_body[0]["id"]).to equal(2)
       end
+
+      it "doesn't take into account wrong parameters" do
+        get "/api/v1/recipes?wrong_param=liver"
+        expect(JSON.parse(response.body).length).to equal(2)
+      end
     end
   end
 end

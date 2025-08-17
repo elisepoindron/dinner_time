@@ -2,8 +2,8 @@ module Api
   module V1
     class RecipesController < ApplicationController
       def index
-        if params[:ingredients].present?
-          @recipes= Recipe.search_by_ingredients(params[:ingredients])
+        if recipes_params[:ingredients].present?
+          @recipes= Recipe.search_by_ingredients(recipes_params[:ingredients])
         else
           @recipes = Recipe.all
         end
@@ -15,6 +15,11 @@ module Api
         @recipe = Recipe.find(params[:id])
 
         render locals: { recipe: @recipe }
+      end
+
+      # Only allow a list of trusted parameters through.
+      def recipes_params
+        params.permit(:ingredients)
       end
     end
   end
