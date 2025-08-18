@@ -2,13 +2,18 @@ module Api
   module V1
     class RecipesController < ApplicationController
       def index
-        if recipes_params[:ingredients].present?
-          @recipes= Recipe.search_by_ingredients(recipes_params[:ingredients])
-        else
-          @recipes = Recipe.all
-        end
+        ingredients, page, items_per_page, sort_by= recipes_params.values_at(:ingredients, :page, :items_per_page, :sort_by)
 
-        render locals: { recipes: @recipes }
+        sort_query= []
+        sort_by ? sort_by.each { |key, value| sort_query.unshift("#{key} #{value}") } : nil
+
+        @recipes = Recipe.order(sort_query)
+        .page(page)
+        .per(items_per_page)
+
+        @recipes= @recipes.search_by_ingredients(ingredients) if ingredients.present?
+
+        render locals: { recipes: @recipes, total_count: @recipes.total_count }
       end
 
       def show
@@ -19,7 +24,7 @@ module Api
 
       # Only allow a list of trusted parameters through.
       def recipes_params
-        params.permit(:ingredients)
+        params.permit({ sort_by: {} }, :items_per_page, :page, :ingredients)
       end
     end
   end

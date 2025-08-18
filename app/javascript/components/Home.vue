@@ -6,14 +6,22 @@
         <v-text-field
           v-model="ingredients_filter"
           label="Filter by ingredients"
-          v-on:keyup.enter="refreshRecipes(ingredients_filter)" 
+          v-on:keyup.enter="refreshRecipes()"
         ></v-text-field>
       </v-col>
       <v-col>
-        <v-btn @click="refreshRecipes(ingredients_filter)"> Search </v-btn>
+        <v-btn @click="refreshRecipes()"> Search </v-btn>
       </v-col>
     </v-row>
-    <v-data-table :items="recipes" @click:row="openRecipe"></v-data-table>
+    <v-data-table-server
+      v-model:items-per-page="itemsPerPage"
+      v-model:page="page"
+      v-model:sort-by="sortBy"
+      :items="recipes"
+      :items-length="totalItems"
+      @click:row="openRecipe"
+      @update:options="refreshRecipes()"
+    ></v-data-table-server>
     <v-dialog v-model="recipe_dialog">
       <v-card :title="selected_recipe.name">
         <v-row class="pa-5">
@@ -47,21 +55,30 @@ export default defineComponent({
     const recipes = ref([]);
     const ingredients_filter = ref("");
     const recipe_dialog = ref(false);
-    const selected_recipe = ref(null);
+    const selected_recipe = ref();
+    const totalItems = ref();
+    const page = ref(1);
+    const itemsPerPage = ref();
+    const sortBy = ref([]);
 
     /**
      * Get a list of recipes filtered on ingredients
-     * 
+     *
      * @param filter a string of ingredients to be filtered on
      */
-    async function refreshRecipes(filter) {
-      recipes.value = await getRecipes(filter);
+    async function refreshRecipes() {
+      [recipes.value, totalItems.value] = await getRecipes(
+        ingredients_filter.value,
+        page.value,
+        itemsPerPage.value,
+        sortBy.value
+      );
     }
 
     /**
      * Get the selected recipe's details and open the a dialog to display them
-     * 
-     * @param _ 
+     *
+     * @param _
      * @param row the selected row
      */
     async function openRecipe(_, row) {
@@ -80,6 +97,10 @@ export default defineComponent({
       openRecipe,
       recipe_dialog,
       selected_recipe,
+      totalItems,
+      itemsPerPage,
+      sortBy,
+      page,
     };
   },
 });
