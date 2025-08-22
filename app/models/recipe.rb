@@ -4,15 +4,7 @@ class Recipe < ApplicationRecord
   has_many :recipe_ingredients
   has_many :ingredients, through: :recipe_ingredients
 
-  include PgSearch::Model
-
-  pg_search_scope :search_by_ingredients,
-    associated_against: { ingredients: :name },
-    using: {
-       tsearch: {
-        dictionary: "english",
-        prefix: true,
-        any_word: true
-        } },
-    order_within_rank: "recipes.rating DESC"
+  scope :search_by_ingredients, ->(query) {
+  joins(:ingredients).merge(Ingredient.search_by_name(query))
+}
 end

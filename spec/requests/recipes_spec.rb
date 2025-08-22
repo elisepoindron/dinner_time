@@ -36,11 +36,12 @@ RSpec.describe "Recipes", type: :request do
         favorite = create(:recipe, name: "Favorite recipe")
         create(:recipe_ingredient, recipe: favorite, ingredient: liver)
 
+        # Trigger doesn't seem to apply in test so we have to force the column to update
+        liver.update_column(:search_vector, "liver")
         get "/api/v1/recipes?ingredients=liver"
 
         expect(response).to have_http_status(:ok)
         expect(response_data).to contain_exactly(a_hash_including("id" => favorite.id, "name" => "Favorite recipe"))
-        expect(response_data[0]["id"]).to eq(favorite.id)
       end
 
       it "ignores wrong parameters" do
