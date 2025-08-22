@@ -4,15 +4,9 @@ class Recipe < ApplicationRecord
   has_many :recipe_ingredients
   has_many :ingredients, through: :recipe_ingredients
 
-  include PgSearch::Model
 
-  pg_search_scope :search_by_ingredients,
-    associated_against: { ingredients: :name },
-    using: {
-       tsearch: {
-        dictionary: "english",
-        prefix: true,
-        any_word: true
-        } },
-    order_within_rank: "recipes.rating DESC"
+  # J'avoue ça c'est généré par chatGPT ahah faut que j'approndisse le "comment ça marche" pour savoir de quoi je parle mais ça marche
+  scope :search_by_ingredients, ->(query) {
+  joins(:ingredients).merge(Ingredient.search_by_name(query))
+}
 end
