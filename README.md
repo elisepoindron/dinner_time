@@ -87,9 +87,18 @@ pick another language of your choice to perform this task.
 </details>
 </details>
 
-##
+## Prod
 
 Project is available at https://dinner-time-v3.fly.dev/
+
+## Dev
+
+```
+bundle exec rails server -p 3000
+```
+```
+bin/vite dev
+```
 
 ## User stories
 - As a user, I want to get all the recipes filtered by ingredients so that I can cook with what I have at home
@@ -101,7 +110,7 @@ Project is available at https://dinner-time-v3.fly.dev/
   - The user arrives on the home page that show the list of recipes
   - The user types in the ingredients he wants to make the filter on
   - The user clicks on search or validates with enter key
-  - The list updates to show the filtered recipes, ranked by text search relevance then rating
+  - The list updates to show the filtered recipes, ranked by text search relevance
   - The user selects sorting to find the most relevant recipe on his own criteria
   - The list udpates to show the filtered and sorted recipes 
 - As a user, I want to read the recipe with its informations so that I can prepare it
